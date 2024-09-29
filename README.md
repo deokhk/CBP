@@ -1,4 +1,4 @@
-# Cross-lingual Back-Parsing: Utterance Synthesis from Meaning Representation for Zero-Resource Semantic Parsing
+## Cross-lingual Back-Parsing: Utterance Synthesis from Meaning Representation for Zero-Resource Semantic Parsing
 <img width="666" src="./images/source_switched_denoising.PNG">
 This repository contains the official implementation of the paper "Cross-lingual Back-Parsing: Utterance Synthesis from Meaning Representation for Zero-Resource Semantic Parsing," accepted at EMNLP 2024.
 
