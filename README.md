@@ -181,11 +181,24 @@ Please refer to the ./scripts/semantic_parser_evalation/*. for more details on e
 If you find this repository helpful, please cite the following paper:
 
 ```
-@article{kang2024cross,
-  title={Cross-lingual Back-Parsing: Utterance Synthesis from Meaning Representation for Zero-Resource Semantic Parsing},
-  author={Kang, Deokhyung and Hwang, Seonjeong and Kim, Yunsu and Lee, Gary Geunbae},
-  journal={arXiv preprint arXiv:2410.00513},
-  year={2024}
+@inproceedings{kang-etal-2024-cross,
+    title = "Cross-lingual Back-Parsing: Utterance Synthesis from Meaning Representation for Zero-Resource Semantic Parsing",
+    author = "Kang, Deokhyung  and
+      Hwang, Seonjeong  and
+      Kim, Yunsu  and
+      Lee, Gary",
+    editor = "Al-Onaizan, Yaser  and
+      Bansal, Mohit  and
+      Chen, Yun-Nung",
+    booktitle = "Proceedings of the 2024 Conference on Empirical Methods in Natural Language Processing",
+    month = nov,
+    year = "2024",
+    address = "Miami, Florida, USA",
+    publisher = "Association for Computational Linguistics",
+    url = "https://aclanthology.org/2024.emnlp-main.792",
+    doi = "10.18653/v1/2024.emnlp-main.792",
+    pages = "14303--14317",
+    abstract = "Recent efforts have aimed to utilize multilingual pretrained language models (mPLMs) to extend semantic parsing (SP) across multiple languages without requiring extensive annotations. However, achieving zero-shot cross-lingual transfer for SP remains challenging, leading to a performance gap between source and target languages. In this study, we propose Cross-Lingual Back-Parsing (CBP), a novel data augmentation methodology designed to enhance cross-lingual transfer for SP. Leveraging the representation geometry of the mPLMs, CBP synthesizes target language utterances from source meaning representations. Our methodology effectively performs cross-lingual data augmentation in challenging zero-resource settings, by utilizing only labeled data in the source language and monolingual corpora. Extensive experiments on two cross-language SP benchmarks (Mschema2QA and Xspider) demonstrate that CBP brings substantial gains in the target language. Further analysis of the synthesized utterances shows that our method successfully generates target language utterances with high slot value alignment rates while preserving semantic integrity. Our codes and data are publicly available at https://github.com/deokhk/CBP.",
 }
 ```
 
