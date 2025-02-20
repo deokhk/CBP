@@ -18,6 +18,11 @@ mkdir data/mschema2qa
 ```
 Download train.json and test.json of mschema2qa dataset from [XSemPLR repository](https://github.com/psunlpgroup/XSemPLR) and move them to the mschema2qa directory.
 
+## 02/21 Updated
+We uploaded filtered generated predictions synthesized from CBP model for Mschema2QA dataset. 
+Please check [here](https://huggingface.co/deokhk/language-adapters/tree/main/filtered_generated_predictions).
+
+
 ## Training Utterance generator
 Training utterance generator consists of two steps: training a language adapter and training a utterance generator using the trained language adapter. 
 ### Training language adapters
@@ -47,6 +52,7 @@ However, if you want to train language adapters from scratch, you can run the sc
 
 Running the script will save trained model to './output/OneM-en{lang}_{lang}../best_checkpoint'.
 Let's denote the above path as `adapter_model_dir`. 
+* Among the pre-trained adapters you can download above, the English adapter is "OneM-enen-en-mean_eng-32.1e-4.1000".  
 
 #### Extracting language adapters only
 To extract language adapters only, run the following script for each language.
@@ -113,7 +119,7 @@ for lang in ${langs[@]}; do
               --valid_batch_size 32  \
               --model_name_or_path $MODEL_PATH \
               --langs en,${lang} \
-              --task_lang $lang \
+              --task_lang ${lang} \
               --adapter_types "decoder-lang" \
               --pretrained_adapter_dir $PRETRAINED_ADAPTER_DIR \
               --inference_data_file $INFERENCE_FILE \
@@ -161,6 +167,7 @@ Make sure to set 'save_path' as a directory where the every checkpoint of the va
 You can filter the generated utterances by running the script at ./scripts/filtering/*. Make sure to move the script to the root directory of the repository before running the script. The script will save the filtered utterances at the same directory where the generated utterances are saved, with the prefix 'filtered_'.
 
 Now that we have a filtered set of utterances, we can train the semantic parser using the filtered utterances along with the english labeled data.
+
 
 ## Training semantic parser using filtered utterances
 
