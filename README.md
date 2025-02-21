@@ -161,7 +161,7 @@ CUDA_VISIBLE_DEVICES=0 python evaluate_mschema2qa_text2sql_ckpts.py --batch_size
 --wandb_log \
 --exp_name eval_mschema2qa_base_32
 ```
-Make sure to set 'save_path' as a directory where the every checkpoint of the vanilla semantic parsing model is saved. The evaluation results will be saved in the 'eval_results_path' directory, and the best checkpoint is selected based on the english test set performance. If you want to evaluate on xspider, please refer to the ./scripts/semantic_parser_evalation/eval_xspider_checkpoints.sh script and .md file.
+Make sure to set 'save_path' as a directory where the every checkpoint of the vanilla semantic parsing model is saved. The evaluation results will be saved in the 'eval_results_path' directory, and the best checkpoint is selected based on the english test set performance. If you want to evaluate on xspider, please refer to the ./scripts/semantic_parser_evaluation/eval_xspider_checkpoints.sh script and .md file.
 
 ### Filtering
 You can filter the generated utterances by running the script at ./scripts/filtering/*. Make sure to move the script to the root directory of the repository before running the script. The script will save the filtered utterances at the same directory where the generated utterances are saved, with the prefix 'filtered_'.
@@ -177,10 +177,10 @@ Make sure that you have a large enough disk space, as we save every checkpoint d
 
 ## Evaluation
 
-First, evaluate the trained checkpoints on the English test set. (./scripts/semantic_parser_evalation/eval_mschema2qa_checkpoints.sh)
-Then, evaluate the best checkpoint on the target language test set. (./scripts/semantic_parser_evalation/eval_mschema2qa.sh)
+First, evaluate the trained checkpoints on the English test set. (./scripts/semantic_parser_evaluation/eval_mschema2qa_checkpoints.sh)
+Then, evaluate the best checkpoint on the target language test set. (./scripts/semantic_parser_evaluation/eval_mschema2qa.sh)
 
-Please refer to the ./scripts/semantic_parser_evalation/*. for more details on evaluation.
+Please refer to the ./scripts/semantic_parser_evaluation/*. for more details on evaluation.
 
 
 ## Citation
