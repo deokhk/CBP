@@ -100,6 +100,109 @@ def encode_sentence_representations(
 
     return np.concatenate(reps, axis=0)
 
+# def plot_2d(
+#     X_2d: np.ndarray,
+#     labels: List[str],
+#     out_png: str,
+#     title: str = "mT5 encoder (last-token) 2D",
+#     x_label: str = "Dim 1",
+#     y_label: str = "Dim 2",
+# ):
+#     """Visualize 2D embeddings and save as PNG."""
+#     plt.figure(figsize=(8, 6), dpi=150)
+
+#     # Fixed color map for languages
+#     color_map = {
+#         "en": "C0",  # blue
+#         "zh": "C1",  # orange
+#         "ko": "C2",  # green
+#         "ar": "C3",  # red
+#         "fi": "C4",  # purple
+#     }
+
+#     for lang in sorted(set(labels), key=lambda x: LANGS.index(x) if x in LANGS else x):
+#         idx = [i for i, l in enumerate(labels) if l == lang]
+#         plt.scatter(X_2d[idx, 0], X_2d[idx, 1], s=16, alpha=0.75, label=lang, c=color_map.get(lang, None))
+
+#     plt.legend(title="Language", markerscale=1.2)
+#     plt.title(title)
+#     plt.xlabel(x_label)
+#     plt.ylabel(y_label)
+#     plt.tight_layout()
+#     plt.savefig(out_png)
+#     plt.close()
+
+
+# def plot_2d(
+#     X_2d: np.ndarray,
+#     labels: List[str],
+#     out_png: str,
+#     title: str = "mT5 encoder (last-token) 2D",
+#     x_label: str = "Dim 1",
+#     y_label: str = "Dim 2",
+# ):
+#     """Visualize 2D embeddings and save as PNG. Also plot per-language mean as a star."""
+#     plt.figure(figsize=(8, 6), dpi=150)
+
+#     # Fixed color map for languages
+#     color_map = {
+#         "en": "C0",  # blue
+#         "zh": "C1",  # orange
+#         "ko": "C2",  # green
+#         "ar": "C3",  # red
+#         "fi": "C4",  # purple (unused here but kept for consistency)
+#     }
+
+#     # Scatter points per language
+#     langs_sorted = sorted(set(labels), key=lambda x: LANGS.index(x) if x in LANGS else x)
+#     labels_arr = np.array(labels)
+
+#     for lang in langs_sorted:
+#         idx = np.where(labels_arr == lang)[0]
+#         plt.scatter(
+#             X_2d[idx, 0], X_2d[idx, 1],
+#             s=16, alpha=0.75, label=lang,
+#             c=color_map.get(lang, None)
+#         )
+
+#     # Overlay language means (stars)
+#     for lang in langs_sorted:
+#         idx = np.where(labels_arr == lang)[0]
+#         if len(idx) == 0:
+#             continue
+#         mean_xy = X_2d[idx].mean(axis=0)
+#         plt.scatter(
+#             mean_xy[0], mean_xy[1],
+#             marker="*", s=220,
+#             c=color_map.get(lang, None),
+#             edgecolors="k", linewidths=0.9,
+#             zorder=5
+#         )
+
+#     # Build two legends: clusters and means
+#     from matplotlib.lines import Line2D
+#     cluster_handles = [Line2D([0], [0], marker='o', linestyle='',
+#                               color=color_map.get(l, 'k'), label=l, markersize=6, alpha=0.9)
+#                        for l in langs_sorted]
+#     mean_handles = [Line2D([0], [0], marker='*', linestyle='',
+#                            markerfacecolor=color_map.get(l, 'k'), markeredgecolor='k',
+#                            label=f"{l} mean", markersize=12)
+#                     for l in langs_sorted]
+
+#     # First legend: clusters
+#     leg1 = plt.legend(handles=cluster_handles, title="Language (points)", loc="best")
+#     plt.gca().add_artist(leg1)
+#     # Second legend: means
+#     plt.legend(handles=mean_handles, title="Per-language mean (★)", loc="upper right")
+
+#     plt.title(title)
+#     plt.xlabel(x_label)
+#     plt.ylabel(y_label)
+#     plt.tight_layout()
+#     plt.savefig(out_png)
+#     plt.close()
+
+
 def plot_2d(
     X_2d: np.ndarray,
     labels: List[str],
@@ -107,30 +210,68 @@ def plot_2d(
     title: str = "mT5 encoder (last-token) 2D",
     x_label: str = "Dim 1",
     y_label: str = "Dim 2",
+    show_means: bool = False,
 ):
-    """Visualize 2D embeddings and save as PNG."""
+    """Visualize 2D embeddings and save as PNG.
+    If show_means=True, plot per-language mean stars and show corresponding legend.
+    Otherwise, show language cluster legend only.
+    """
     plt.figure(figsize=(8, 6), dpi=150)
 
     # Fixed color map for languages
     color_map = {
-        "en": "C0",  # blue
-        "zh": "C1",  # orange
-        "ko": "C2",  # green
-        "ar": "C3",  # red
-        "fi": "C4",  # purple
+        "en": "C0",
+        "zh": "C1",
+        "ko": "C2",
+        "ar": "C3",
+        "fi": "C4",
     }
 
-    for lang in sorted(set(labels), key=lambda x: LANGS.index(x) if x in LANGS else x):
-        idx = [i for i, l in enumerate(labels) if l == lang]
-        plt.scatter(X_2d[idx, 0], X_2d[idx, 1], s=16, alpha=0.75, label=lang, c=color_map.get(lang, None))
+    langs_sorted = sorted(set(labels), key=lambda x: LANGS.index(x) if x in LANGS else x)
+    labels_arr = np.array(labels)
 
-    plt.legend(title="Language", markerscale=1.2)
+    # Scatter points
+    for lang in langs_sorted:
+        idx = np.where(labels_arr == lang)[0]
+        plt.scatter(
+            X_2d[idx, 0], X_2d[idx, 1],
+            s=16, alpha=0.75,
+            label=lang if not show_means else None,
+            c=color_map.get(lang, None)
+        )
+
+    if show_means:
+        # Overlay means and build legend
+        from matplotlib.lines import Line2D
+        mean_handles = []
+        for lang in langs_sorted:
+            idx = np.where(labels_arr == lang)[0]
+            if len(idx) == 0:
+                continue
+            mean_xy = X_2d[idx].mean(axis=0)
+            plt.scatter(
+                mean_xy[0], mean_xy[1],
+                marker="*", s=220,
+                c=color_map.get(lang, None),
+                edgecolors="k", linewidths=0.9,
+                zorder=5
+            )
+            mean_handles.append(
+                Line2D([0], [0], marker="*", linestyle="",
+                       markerfacecolor=color_map.get(lang, "k"),
+                       markeredgecolor="k", label=f"{lang} mean", markersize=12)
+            )
+        plt.legend(handles=mean_handles, title="Per-language mean (★)", loc="best")
+    else:
+        plt.legend(title="Language (points)", markerscale=1.2, loc="best")
+
     plt.title(title)
     plt.xlabel(x_label)
     plt.ylabel(y_label)
     plt.tight_layout()
     plt.savefig(out_png)
     plt.close()
+
 
 def main():
     parser = argparse.ArgumentParser(description="mT5 encoder representation 2D viz by language (PCA or t-SNE)")
@@ -148,8 +289,10 @@ def main():
                         help="Dimensionality reduction method: 'pca' or 'tsne'.")
     parser.add_argument(
         "--pooling", type=str, choices=["mean", "last"], default="mean",
-        help="Sentence pooling strategy: 'mean' over non-pad tokens or 'last' token."
-)
+        help="Sentence pooling strategy: 'mean' over non-pad tokens or 'last' token.")   
+    parser.add_argument("--show_means", action="store_true",
+                        help="If set, plot per-language mean stars (★) instead of default language legends.")
+
 
     # Preprocessing
     parser.add_argument("--scale", action="store_true", help="Standardize features before reduction (recommended).")
@@ -158,9 +301,9 @@ def main():
     parser.add_argument("--whiten", action="store_true", help="Use PCA whitening (PCA only).")
 
     # t-SNE options
-    parser.add_argument("--perplexity", type=float, default=30.0, help="t-SNE perplexity.")
+    parser.add_argument("--perplexity", type=float, default=40.0, help="t-SNE perplexity.")
     parser.add_argument("--learning_rate", type=float, default=200.0, help="t-SNE learning rate.")
-    parser.add_argument("--n_iter", type=int, default=1000, help="t-SNE iterations.")
+    parser.add_argument("--n_iter", type=int, default=2000, help="t-SNE iterations.")
     parser.add_argument("--metric", type=str, default="euclidean", help="t-SNE distance metric.")
     parser.add_argument("--tsne_init", type=str, choices=["random", "pca"], default="random",
                         help="t-SNE init strategy.")
@@ -232,10 +375,11 @@ def main():
                 f.write(f"{lang},{x},{y}\n")
 
         # Plot
-        png_path = os.path.join(args.out_dir, "mt5_lasttoken_pca.png")
-        evr = pca.explained_variance_ratio_
-        title = f"mT5-large encoder rep ({args.pooling}) PCA | langs={','.join(args.langs)} | EVR=({evr[0]:.2f}, {evr[1]:.2f})"
-        plot_2d(X_2d, labels, png_path, title=title, x_label="PC 1", y_label="PC 2")
+        suffix = "means" if args.show_means else "points"
+        png_path = os.path.join(args.out_dir, f"mt5_{args.pooling}_pca_{suffix}.png")
+        title = f"mT5 encoder rep ({args.pooling}) PCA | langs={','.join(args.langs)}"
+        plot_2d(X_2d, labels, png_path, title=title,
+                x_label="PC 1", y_label="PC 2", show_means=args.show_means)
 
     else:  # tsne
         print("[Info] Running t-SNE to 2D...")
@@ -269,9 +413,11 @@ def main():
                 f.write(f"{lang},{x},{y}\n")
 
         # Plot
-        png_path = os.path.join(args.out_dir, "mt5_lasttoken_tsne.png")
-        title = f"mT5-large encoder rep ({args.pooling}) t-SNE | langs={','.join(args.langs)}"
-        plot_2d(X_2d, labels, png_path, title=title, x_label="t-SNE dim 1", y_label="t-SNE dim 2")
+        suffix = "means" if args.show_means else "points"
+        png_path = os.path.join(args.out_dir, f"mt5_{args.pooling}_tsne_{suffix}.png")
+        title = f"mT5 encoder rep ({args.pooling}) t-SNE | langs={','.join(args.langs)}"
+        plot_2d(X_2d, labels, png_path, title=title,
+                x_label="t-SNE dim 1", y_label="t-SNE dim 2", show_means=args.show_means)
 
     print("[Done]")
 
